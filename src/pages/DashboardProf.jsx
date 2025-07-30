@@ -1,69 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
+import React from 'react';
+import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import "../style.css";
 
-function DashboardProf() {
-  const [userData, setUserData] = useState(null);
+function DashboardProf({ userData }) {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
-        } else {
-          console.error("Aucune donnée trouvée.");
-        }
-      } else {
-        navigate('/login');
-      }
-    };
-
-    fetchUser();
-  }, [navigate]);
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate('/login');
+  const handleLogout = () => {
+    signOut(getAuth()).then(() => {
+      navigate("/login");
+    });
   };
 
   if (!userData) {
-    return <div>Chargement...</div>;
+    return <div style={{ textAlign: "center", marginTop: "50px" }}>Chargement...</div>;
   }
 
   return (
-    <div style={styles.container}>
-      <h2>Bienvenue, Prof. {userData.prenom} {userData.nom}</h2>
-      <p><strong>Email :</strong> {userData.email}</p>
-      <p><strong>Matière / Spécialité :</strong> {userData.specialite}</p>
-      <button onClick={handleLogout} style={styles.button}>Se déconnecter</button>
+    <div style={{
+      minHeight: "100vh",
+      backgroundColor: "#f0f2f5",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px"
+    }}>
+      <div style={{
+        backgroundColor: "#fff",
+        padding: "40px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        maxWidth: "600px",
+        width: "100%",
+        textAlign: "center"
+      }}>
+        <h2 style={{ color: "#003366", marginBottom: "20px" }}>
+          Bienvenue Professeur, {userData.prenom} {userData.nom?.toUpperCase()}
+        </h2>
+        <p><strong>Email :</strong> {userData.email}</p>
+        <p><strong>Matière :</strong> {userData.specialite}</p>
+
+        <button onClick={handleLogout} style={{
+          marginTop: "30px",
+          backgroundColor: "#003366",
+          color: "#fff",
+          padding: "12px 28px",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer"
+        }}>
+          Se déconnecter
+        </button>
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: 500,
-    margin: '50px auto',
-    padding: 20,
-    border: '1px solid #ccc',
-    borderRadius: 10,
-    backgroundColor: '#f4f8fb',
-  },
-  button: {
-    marginTop: 20,
-    padding: '10px 20px',
-    backgroundColor: '#003366',
-    color: 'white',
-    border: 'none',
-    borderRadius: 5,
-    cursor: 'pointer',
-  }
-};
 
 export default DashboardProf;

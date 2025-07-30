@@ -87,7 +87,7 @@ body {
 }
 
 .form-style {
-  background-color: #d2e8f5; /* Bleu ciel */
+  background-color: #d2e8f5;
   padding: 30px;
   border-radius: 10px;
   width: 90%;
@@ -97,7 +97,7 @@ body {
 }
 
 .form-title {
-  color: #003366; /* Bleu marine */
+  color: #003366; 
   margin-bottom: 20px;
   font-size: 24px;
 }
@@ -121,7 +121,7 @@ body {
 }
 
 .btn-submit {
-  background-color: #003366; /* Bleu marine */
+  background-color: #003366;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -152,7 +152,7 @@ body {
   align-items: center;
   height: 10000vh;
   width: 1000;
-  background-color: #f1f1f1;
+  background-color: #067bbe;
   font-family: "Times New Roman", serif;
 }
 

@@ -1,50 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import"../style.css";
+import "../style.css";
 
-function DashboardEtudiant() {
+function DashboardEtudiant({ userData }) {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const auth = getAuth();
-    const db = getFirestore();
-
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const docRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            setUserData(docSnap.data());
-          } else {
-            console.log("Aucune donnée trouvée pour cet utilisateur.");
-          }
-        } catch (error) {
-          console.error("Erreur lors de la récupération des données :", error);
-        }
-        setLoading(false);
-      } else {
-        navigate("/login");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [navigate]);
 
   const handleLogout = () => {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      navigate('/login');
-    }).catch((error) => {
-      console.error("Erreur lors de la déconnexion :", error);
+    signOut(getAuth()).then(() => {
+      navigate("/login");
     });
   };
 
-  if (loading) {
+  if (!userData) {
     return <div style={{ textAlign: "center", marginTop: "50px" }}>Chargement...</div>;
   }
 
@@ -66,36 +34,25 @@ function DashboardEtudiant() {
         width: "100%",
         textAlign: "center"
       }}>
-        <h2 style={{
-          marginBottom: "30px",
-          fontSize: "26px",
-          color: "#003366"
-        }}>
-          Bienvenue, {userData?.prenom} {userData?.nom?.toUpperCase()}
+        <h2 style={{ color: "#003366", marginBottom: "20px" }}>
+          Bienvenue Étudiant, {userData.prenom} {userData.nom?.toUpperCase()}
         </h2>
-        <p style={{ marginBottom: "10px" }}><strong>Email :</strong> {userData?.email}</p>
-        <p style={{ marginBottom: "10px" }}><strong>Spécialité :</strong> {userData?.specialite}</p>
-        <p style={{ marginBottom: "30px" }}><strong>Niveau d'étude :</strong> {userData?.niveau}</p>
+        <p><strong>Email :</strong> {userData.email}</p>
+        <p><strong>Spécialité :</strong> {userData.specialite}</p>
+        <p><strong>Niveau :</strong> {userData.niveau}</p>
 
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              backgroundColor: "#003366",
-              color: "#fff",
-              padding: "12px 28px",
-              border: "none",
-              borderRadius: "8px",
-              fontSize: "16px",
-              cursor: "pointer",
-              transition: "background-color 0.3s ease"
-            }}
-            onMouseOver={e => e.target.style.backgroundColor = "#002244"}
-            onMouseOut={e => e.target.style.backgroundColor = "#003366"}
-          >
-            Se déconnecter
-          </button>
-        </div>
+        <button onClick={handleLogout} style={{
+          marginTop: "30px",
+          backgroundColor: "#003366",
+          color: "#fff",
+          padding: "12px 28px",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer"
+        }}>
+          Se déconnecter
+        </button>
       </div>
     </div>
   );
