@@ -12,6 +12,10 @@ function DashboardProf({ userData }) {
     });
   };
 
+  const goToMessagerie = () => {
+    navigate("/messagerie");
+  };
+
   if (!userData) {
     return <div style={{ textAlign: "center", marginTop: "50px" }}>Chargement...</div>;
   }
@@ -40,8 +44,22 @@ function DashboardProf({ userData }) {
         <p><strong>Email :</strong> {userData.email}</p>
         <p><strong>Matière :</strong> {userData.specialite}</p>
 
+        <button onClick={goToMessagerie} style={{
+          marginTop: "20px",
+          backgroundColor: "#007acc",
+          color: "#fff",
+          padding: "12px 28px",
+          border: "none",
+          borderRadius: "8px",
+          fontSize: "16px",
+          cursor: "pointer",
+          marginRight: "10px"
+        }}>
+          Accéder à la messagerie
+        </button>
+
         <button onClick={handleLogout} style={{
-          marginTop: "30px",
+          marginTop: "20px",
           backgroundColor: "#003366",
           color: "#fff",
           padding: "12px 28px",

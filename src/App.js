@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardEtudiant from './pages/DashboardEtudiant';
 import DashboardProf from './pages/DashboardProf';
+import Messagerie from './pages/Messagerie';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -73,6 +74,17 @@ function App() {
             )
           }
         />
+
+        <Route
+          path="/messagerie"
+          element={
+          user ? (
+          <Messagerie />
+          ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
