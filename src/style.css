@@ -12,7 +12,7 @@ body {
 }
 
 .inscription-container {
-  background-color: #e0f7fa; 
+  background-color: #d6ecf3; /* plus doux et moins vif que #e0f7fa */
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -22,7 +22,7 @@ body {
 
 .inscription-title {
   text-align: center;
-  color: #003366; /* Bleu marine */
+  color: #003366;
   margin-bottom: 20px;
   font-size: 28px;
 }
@@ -40,6 +40,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 6px;
   outline: none;
+  background-color: #f9fcff; /* arrière-plan discret */
 }
 
 .register-form input:focus,
@@ -48,7 +49,7 @@ body {
 }
 
 .btn-submit {
-  background-color: #003366; /* Bleu marine */
+  background-color: #003366;
   color: white;
   padding: 12px;
   border: none;
@@ -83,11 +84,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f1f1f1;
+  background-color: #f0f2f5;
 }
 
 .form-style {
-  background-color: #d2e8f5;
+  background-color: #dce9f2; /* plus doux que #d2e8f5 */
   padding: 30px;
   border-radius: 10px;
   width: 90%;
@@ -97,7 +98,7 @@ body {
 }
 
 .form-title {
-  color: #003366; 
+  color: #003366;
   margin-bottom: 20px;
   font-size: 24px;
 }
@@ -118,6 +119,7 @@ body {
   padding: 8px;
   border: 1px solid #aaa;
   border-radius: 5px;
+  background-color: #f9fcff;
 }
 
 .btn-submit {
@@ -145,36 +147,60 @@ body {
 }
 
 
-/*dashboard*/
+/* Dashboard */
 .dashboard-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  height: 10000vh;
-  width: 1000;
-  background-color: #067bbe;
+  min-height: 100vh;
+  padding: 40px;
+  background-color: #eef6fa; /* arrière-plan doux */
   font-family: "Times New Roman", serif;
 }
 
 .dashboard-box {
-  background-color: #e0f7fa;
-  padding: 30px 40px;
+  background-color: #dceaf6; /* plus doux que #0889d3 */
+  color: #003366;
+  padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  text-align: center;
-  width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   max-width: 600px;
+  width: 100%;
+  text-align: center;
 }
 
 .dashboard-title {
   color: #003366;
-  font-size: 24px;
   margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+  background-color: #003366;
+  color: #ffffff;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .user-info p {
   font-size: 18px;
   margin: 10px 0;
+  background-color: #f0f4f8; /* Fond doux pour bien faire ressortir le texte */
+  padding: 8px;
+  border-radius: 6px;
+  color: #003366;
 }
 
 .logout-button {
@@ -201,6 +227,7 @@ body {
   cursor: pointer;
   border-radius: 4px;
 }
+
 .btn-supprimer:hover {
   background-color: darkred;
 }

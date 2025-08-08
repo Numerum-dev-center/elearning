@@ -1,94 +1,57 @@
 // src/App.js
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { auth, db } from './firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useContext } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-import Login from './pages/Login';
-import Register from './pages/Register';
-import DashboardEtudiant from './pages/DashboardEtudiant';
-import DashboardProf from './pages/DashboardProf';
-import Messagerie from './pages/Messagerie';
+import { UserProvider, UserContext } from "./context/UserContext";
 
-function App() {
-  const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import DashboardEtudiant from "./pages/DashboardEtudiant";
+import DashboardProf from "./pages/DashboardProf";
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        try {
-          const docRef = doc(db, 'users', currentUser.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            setUserData(docSnap.data());
-          } else {
-            console.log('No user data found');
-            setUserData(null);
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-          setUserData(null);
-        }
-      } else {
-        setUserData(null);
-      }
-      setLoading(false);
-    });
+function AppRoutes() {
+  const { user, userData, loading } = useContext(UserContext);
 
-    return () => unsubscribe();
-  }, []);
+  if (loading) return <p>Chargement...</p>;
 
-  if (loading) return <div>Chargement...</div>;
-
-  return (
-    <Router>
+  if (!user) {
+    return (
       <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/register" />}
-        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        <Route
-          path="/dashboard-etudiant"
-          element={
-            user && userData?.role === 'etudiant' ? (
-              <DashboardEtudiant userData={userData} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route
-          path="/dashboard-prof"
-          element={
-            user && userData?.role === 'professeur' ? (
-              <DashboardProf userData={userData} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route
-          path="/messagerie"
-          element={
-          user ? (
-          <Messagerie />
-          ) : (
-      <Navigate to="/login" />
-    )
-  }
-/>
-
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </Router>
+    );
+  }
+
+  if (userData?.role === "étudiant") {
+    return (
+      <Routes>
+        <Route path="/dashboard-etudiant" element={<DashboardEtudiant userData={userData} />} />
+        <Route path="*" element={<Navigate to="/dashboard-etudiant" />} />
+      </Routes>
+    );
+  }
+
+  if (userData?.role === "professeur") {
+    return (
+      <Routes>
+        <Route path="/dashboard-prof" element={<DashboardProf userData={userData} />} />
+        <Route path="*" element={<Navigate to="/dashboard-prof" />} />
+      </Routes>
+    );
+  }
+
+  return <p>Rôle utilisateur non reconnu</p>;
+}
+
+function App() {
+  return (
+    <UserProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </UserProvider>
   );
 }
 
